@@ -2,8 +2,10 @@ README.md
 pyproject.toml
 src/sudoku/__init__.py
 src/sudoku/board.py
+src/sudoku/load_board.py
 src/sudoku.egg-info/PKG-INFO
 src/sudoku.egg-info/SOURCES.txt
 src/sudoku.egg-info/dependency_links.txt
 src/sudoku.egg-info/top_level.txt
 tests/test_board.py
+tests/test_load_board.py

@@ -15,9 +15,8 @@ def print_board(board):
                 print("-"*6 + "+", end=" ")
             print("-"*6)
         for l in range(9):
-            print(board[i][k], end=" ")
-            k += 1
-            if k == 3 or k == 6:
+            print(board[i][l], end=" ")
+            if l == 2 or l == 5:
                 print("|", end=" ")
     print()
 
