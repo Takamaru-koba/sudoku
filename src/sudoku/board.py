@@ -21,3 +21,55 @@ def print_board(board):
     print()
 
 
+def row_ok(board, r):
+    seen = set()
+    row = board[r]
+
+    for val in row:
+        if val == 0:
+            continue
+        if val in seen:
+            raise ValueError(
+                f"In Row {r}, the Digit {val} seen twice"
+            )
+        seen.add(val)
+    return True
+
+
+def column_ok(board, c):
+    seen = set()
+    
+    for row in board:
+        val = row[c]
+        if val == 0:
+            continue
+        if val in seen:
+            raise ValueError(
+                f"In Column {c}, The Digit {val} appear twice"
+                )
+        seen.add(val)
+    return True
+
+def box_ok(board, r, c):
+    seen = set()
+    nc = (c // 3) * 3
+    nr = (r // 3) * 3
+    
+    for i in range(3):
+        for j in range(3):
+            val = board[nr + i][nc + j]
+            if val == 0:
+                continue
+            elif val in seen:
+                raise ValueError(
+                    f"In the Box contain Row {r} Column {c}, the Digit {board[nr + i][nc + j]} appears twice "
+                )
+            seen.add(val)
+    return True
+
+def is_valid_move(board, r, c, val):
+    board[r][c] = val
+    row_ok(board, r)
+    column_ok(board, c)
+    box_ok(board, r, c)
+    return True
