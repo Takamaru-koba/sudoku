@@ -1,12 +1,13 @@
 import sys
 import argparse
-from sudoku.board import print_board
+from sudoku.board import print_board, find_empty, candidates
 from sudoku.load_board import load_board
 
 def parser_args():
     parser = argparse.ArgumentParser(description="CLI for loading file")
-    parser.add_argument("--load", required="True", help="Path to puzzle file")
+    parser.add_argument("--load", required=True, help="Path to puzzle file")
     parser.add_argument("--show", action="store_true", help="print loaded file")
+    parser.add_argument("--hint", action="store_true", help="printing hints")
     return parser.parse_args()
 
 def main():
@@ -16,6 +17,18 @@ def main():
     except ValueError as e:
         print(str(e), file=sys.stderr)
         sys.exit(2)
+
+    if args.hint:
+        cell = find_empty(board)
+        if cell is None:
+            print("No empty. Completed?")
+        else:
+            r, c = cell
+            can = candidates(board, r, c)
+            if not can:
+                print(f"Dead end at Row {r}, Column {c}")
+            else:
+                print(f"You can fill {can} in an empty cell at Row {r} Column {c}")
 
     if args.show:
         print_board(board)

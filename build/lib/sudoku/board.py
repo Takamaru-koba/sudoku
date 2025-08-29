@@ -78,12 +78,12 @@ def find_empty(board):
     for row_idx, row in enumerate(board, start=0):
         for val_idx, val in enumerate(row, start=0):
             if val == 0:
-                return row_idx, val_idx
+                return (True, f"Row {row_idx}, Column {val_idx} is empty")
     return None
 
 def candidates(board, r, c):
     if board[r][c] != 0:
-        raise ValueError(
+        return ValueError(
             "This is not empty cell"
         )
     
@@ -117,3 +117,5 @@ def candidates(board, r, c):
             seen.remove(val)
         
     return sorted(seen)
+
+    
