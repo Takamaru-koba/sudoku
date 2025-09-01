@@ -139,3 +139,42 @@ def solve(board):
                 return True
             board[r][c] = 0
     return False
+
+CONTRADICTION = object()
+SOLVED = object()
+
+def find_mrv_empty(board):
+    best_len = 10
+    best = None
+    for row_idx, row in enumerate(board):
+        for val_idx, val in enumerate(row):
+            if val == 0:
+                 cans = len(candidates(board, row_idx, val_idx))
+                 if cans == 0:
+                     return CONTRADICTION
+                 elif cans == 1:
+                     return (row_idx, val_idx)
+                 elif cans < best_len:
+                     best = (row_idx, val_idx)
+                     best_len = cans
+    if best is None:
+        return SOLVED
+    else:
+        return best
+    
+def new_solve(board):
+    global steps
+    pick = find_mrv_empty(board)
+    if pick is SOLVED:
+        return True
+    elif pick is CONTRADICTION:
+        return False
+    
+    r, c = pick
+    for can in candidates(board, r, c):
+        board[r][c] = can
+        steps += 1
+        if new_solve(board):
+            return True
+        board[r][c] = 0
+    return False
