@@ -1,6 +1,7 @@
 import sys
 import argparse
-from sudoku.board import print_board, find_empty, candidates
+import sudoku.board as sb
+from sudoku.board import print_board, find_empty, candidates, solve
 from sudoku.load_board import load_board
 
 def parser_args():
@@ -8,6 +9,7 @@ def parser_args():
     parser.add_argument("--load", required=True, help="Path to puzzle file")
     parser.add_argument("--show", action="store_true", help="print loaded file")
     parser.add_argument("--hint", action="store_true", help="printing hints")
+    parser.add_argument("--solve", action="store_true", help="This solves the board")
     return parser.parse_args()
 
 def main():
@@ -29,6 +31,12 @@ def main():
                 print(f"Dead end at Row {r}, Column {c}")
             else:
                 print(f"You can fill {can} in an empty cell at Row {r} Column {c}")
+
+    if args.solve:
+        sb.steps = 0
+        answer = solve(board)
+        print(f"solved? {answer} steps:{sb.steps}")
+        print_board(board)
 
     if args.show:
         print_board(board)

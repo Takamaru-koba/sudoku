@@ -5,14 +5,12 @@ def test_has_empty():
     board = [
       [0,1,2,3,4,5,6,7,8],
       [9,0,0,0,0,0,0,0,0],
-      *([[0]*9]*7),
-    ]
+     ] + [[0]*9 for _ in range(7)]
+    
     assert (0, 0) == find_empty(board)
 
 def test_no_empty():
-    board = [
-        ([1]*9)*9
-    ]
+    board = [[1]*9 for _ in range(9)]
     assert find_empty(board) is None
 
 def test_many_empties():
@@ -48,7 +46,8 @@ def test_candidates_row_blocking():
       [0,0,0, 0,8,0, 0,7,9],
     ]
     cs = candidates(board, 0, 2)
-    assert [5, 3, 7] not in cs
+    for v in (3, 5, 7):
+      assert v not in cs
 
 def test_candidates_column_blocking():
     board = [
@@ -63,7 +62,8 @@ def test_candidates_column_blocking():
       [0,0,0, 0,8,0, 0,7,9],
     ]
     cs = candidates(board, 2, 0)
-    assert [4, 5, 6, 7, 8] not in cs
+    for v in (4, 5, 6, 7, 8):
+        assert v not in cs
 
 def test_candidate_box_blocking():
     board = [
@@ -78,7 +78,8 @@ def test_candidate_box_blocking():
       [0,0,0, 0,8,0, 0,7,9],
     ]
     cs = candidates(board, 4, 4)
-    assert [2, 3, 6, 8] not in cs
+    for v in (2, 3, 6, 8):
+      assert v not in cs
 
 def test_candidates_not_empty():
     board = [

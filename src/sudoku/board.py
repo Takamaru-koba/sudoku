@@ -68,10 +68,16 @@ def box_ok(board, r, c):
     return True
 
 def is_valid_move(board, r, c, val):
+    old = board
     board[r][c] = val
-    row_ok(board, r)
-    column_ok(board, c)
-    box_ok(board, r, c)
+    try:
+        row_ok(board, r)
+        column_ok(board, c)
+        box_ok(board, r, c)
+    except ValueError:
+        board = old
+        return False
+    board = old
     return True
 
 def find_empty(board):
@@ -92,7 +98,7 @@ def candidates(board, r, c):
         seen.add(i)
 
     start_row = (r // 3) * 3
-    start_column = (r // 3) * 3
+    start_column = (c // 3) * 3
 
     for i in range(3):
         for j in range(3):
@@ -117,3 +123,19 @@ def candidates(board, r, c):
             seen.remove(val)
         
     return sorted(seen)
+
+steps = 0
+def solve(board):
+    global steps
+    cell = find_empty(board)
+    if cell is None:
+        return True
+    r, c = cell
+    for can in candidates(board, r, c):
+        if is_valid_move(board, r, c, can):
+            board[r][c] = can
+            steps += 1
+            if solve(board):
+                return True
+            board[r][c] = 0
+    return False
