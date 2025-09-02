@@ -1,8 +1,8 @@
 import sys
 import argparse
 import sudoku.board as sb
-from sudoku.board import print_board, find_empty, candidates, solve
-from sudoku.load_board import load_board
+from sudoku.board import print_board, find_empty, candidates, new_solve
+from sudoku.load_board import load_board, load_any
 
 def parser_args():
     parser = argparse.ArgumentParser(description="CLI for loading file")
@@ -15,7 +15,7 @@ def parser_args():
 def main():
     args = parser_args()
     try:
-        board = load_board(args.load)
+        board = load_any(args.load)
     except ValueError as e:
         print(str(e), file=sys.stderr)
         sys.exit(2)
@@ -34,11 +34,10 @@ def main():
 
     if args.solve:
         sb.steps = 0
-        answer = solve(board)
+        answer = new_solve(board)
         print(f"solved? {answer} steps:{sb.steps}")
         print_board(board)
-
-    if args.show:
+    elif args.show:
         print_board(board)
 
 if __name__ ==  "__main__":

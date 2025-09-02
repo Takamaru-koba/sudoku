@@ -1,5 +1,6 @@
 import pytest
-from sudoku.load_board import load_board
+import typing
+from sudoku.load_board import load_board, load_flat81, load_csv
 
 def test_good_file():
     board = load_board("data/good_file.txt")
@@ -30,3 +31,15 @@ def test_too_many_row():
     msg = str(e.value)
 
     assert "9" in msg
+
+def test_load_flat81():
+    board = load_flat81("data/flat81.txt")
+    assert len(board) == 9
+    for row in board:
+        assert len(row) == 9
+    
+def test_load_csv():
+    board = load_csv("data/csv.txt")
+    assert len(board) == 9
+    for row in board:
+        assert len(row) == 9
