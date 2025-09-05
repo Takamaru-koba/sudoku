@@ -8,18 +8,29 @@ def print_board(board):
             raise ValueError
 
     for i in range(9):
-        k = 0
-        print()
-        if i % 3 == 0 and i != 0:
-            for j in range(2):
-                print("-"*6 + "+", end=" ")
-            print("-"*6)
-        for l in range(9):
-            print(board[i][l], end=" ")
-            if l == 2 or l == 5:
-                print("|", end=" ")
+        if i == 0:
+            print(" ", end=" ")
+        if i % 3 == 0:
+            print(" ", end=" ")
+        print(i, end=" ")
     print()
-
+    for i in range(9):
+        if i % 3 == 0:
+            print((" " * 2) + ("+" + "-"*7)*3 + "+")
+        print(i, end=" ")
+        for l in range(9):
+            if l % 3 == 0:
+                print("|", end=" ")
+            if board[i][l] == 0:
+                print(".", end=" ")
+            else:
+                print(board[i][l], end=" ")
+            if l == 8:
+                print("|", end=" ")
+        print()
+        if i == 8:
+            print((" " * 2) + ("+" + "-"*7)*3 + "+")
+    print()
 
 def row_ok(board, r):
     seen = set()
