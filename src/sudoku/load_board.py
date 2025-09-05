@@ -104,7 +104,7 @@ def detect_format(text: str) -> str:
     elif len(lines) >= 9 and all("," not in line and 7 <= len(line) <= 11 for line in lines[:9]):
         return "board"
     compact = "".join(text.split())
-    if len(compact) == 81 and all(ch.isdigit() or "." for ch in compact):
+    if len(compact) == 81 and all(ch.isdigit() or ch == "." for ch in compact):
         return "flat81"
     raise ValueError("Unknown puzzle format (cannot auto-detect)")
 

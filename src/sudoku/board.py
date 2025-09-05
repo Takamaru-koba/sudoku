@@ -79,16 +79,27 @@ def box_ok(board, r, c):
     return True
 
 def is_valid_move(board, r, c, val):
-    old = board
-    board[r][c] = val
-    try:
-        row_ok(board, r)
-        column_ok(board, c)
-        box_ok(board, r, c)
-    except ValueError:
-        board = old
+    """Return True if placing val at (r,c) is valid under Sudoku rules."""
+    if val == 0:  # erasing is always valid
+        return True
+
+    # Check row
+    if val in board[r]:
         return False
-    board = old
+
+    # Check column
+    for row in board:
+        if row[c] == val:
+            return False
+
+    # Check 3x3 box
+    start_r = (r // 3) * 3
+    start_c = (c // 3) * 3
+    for i in range(3):
+        for j in range(3):
+            if board[start_r + i][start_c + j] == val:
+                return False
+
     return True
 
 def find_empty(board):
@@ -188,4 +199,23 @@ def new_solve(board):
         if new_solve(board):
             return True
         board[r][c] = 0
+    return False
+
+
+def solve(board):
+    """Baseline backtracking solver: pick first empty cell, try 1..9 in order."""
+    global steps
+    empty = find_empty(board)
+    if empty is None:
+        return True  # solved
+
+    r, c = empty
+    for v in range(1, 10):
+        if is_valid_move(board, r, c, v):
+            board[r][c] = v
+            steps += 1
+            if solve(board):
+                return True
+            board[r][c] = 0  # backtrack
+
     return False

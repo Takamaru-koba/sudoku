@@ -1,7 +1,8 @@
+import time
 import sys
 import argparse
 import sudoku.board as sb
-from sudoku.board import print_board, find_empty, candidates, new_solve
+from sudoku.board import print_board, find_empty, candidates, new_solve, solve
 from sudoku.load_board import load_any
 from sudoku.move import do_move, undo
 
@@ -14,12 +15,14 @@ def parser_args():
     parser.add_argument("--move", nargs=3, type=int, metavar=("R", "C", "V") ,help="move the cell")
     parser.add_argument("--undo", action="store_true", help="UNDO last move")
     parser.add_argument("--play", action="store_true", help="Let's play it!!")
+    parser.add_argument("--profile", action="store_true", help="Shows steps and time in ms")
+    parser.add_argument("--solver", choices=["baseline", "mrv"], default="mrv", help="how to solve it?")
     return parser.parse_args()
 
 def main():
     digit = None
     args = parser_args()
-    if not (args.play or args.solve or args.show or args.hint or args.move or args.undo):
+    if not (args.play or args.solve or args.show or args.hint or args.move or args.undo or args.profile):
         print("Sudoku CLI")
         print("="*11)
         print("[1] Play")
@@ -120,7 +123,7 @@ def main():
             if board[r][c] != 0:
                 raise ValueError("That cell is a clue")
             do_move(state, r, c, v, history)  
-              
+
         if args.undo:
             if not history:
                 raise ValueError("You can't undo yet as there is no history")
@@ -138,18 +141,39 @@ def main():
                 else:
                     print(f"You can fill {can} in an empty cell at Row {r} Column {c}")
 
+
         if args.solve or digit == "2":
             work = [row[:] for row in state]
             sb.steps = 0
-            answer = new_solve(work)
-            print(f"solved? {answer} steps:{sb.steps}")
-            if answer == False:
-                print_board(state)
+            if args.profile:
+                start = time.perf_counter()
+                if args.solver == "mrv":
+                    answer = new_solve(work)
+                elif args.solver == "baseline":
+                    answer = solve(work)
+                end = time.perf_counter()
+                elapse = (end - start) * 1000
+                print()
+                print(f"solved? {answer} steps:{sb.steps} time:{elapse:.2f}ms")
+                print()
+                if answer == False:
+                    print_board(state)
+                else:
+                    print_board(work)
             else:
-                print_board(work)
+                if args.solver == "mrv":
+                    answer = new_solve(work)
+                elif args.solver == "baseline":
+                    answer = solve(work)
+                print()
+                print(f"solved? {answer} steps:{sb.steps}")
+                print()
+                if answer == False:
+                    print_board(state)
+                else:
+                    print_board(work)
         elif args.show or digit == "3":
             print_board(state)
-
 
 if __name__ ==  "__main__":
     main()
