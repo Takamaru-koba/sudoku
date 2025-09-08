@@ -1,5 +1,11 @@
 Sudoku CLI Solver
 
+Vidoe URL: https://youtu.be/Vh6pO9vaATg
+
+
+
+Description:
+
 A command-line interface (CLI) Sudoku solver and player.
 You can play Sudoku interactively, get hints, undo moves, or let the computer solve it using backtracking solvers. Supports multiple puzzle formats (.txt, flat81, .csv).
 
